@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Firebase with frends!</title>
+
+</head>
+
+<body>
+
+  <!-- Text with spanID that gets filled with content -->
+  <p>enter text you wish to send</p>
+  <br>
+
+  <!-- Button -->
+
+    <form>
+        <P> Enter your name then hit submit before entering text.</P>
+        <input id="submit-name" type="submit" value="Enter Name First">
+        <input id="userName" type="text">
+        
+    </form>
+<br>
+<br>
+<br>
+<br>
+  <form>
+      <p> now enter the text you want to send.</p>
+        <span id="todo-item">Enter Text here:  <input id="input" type="text" ><input id="submit" value="Send" type="submit"></span>
+      </form>
+    
+      <br>
+      <p> results below:</p>
+     
+      <p id ="results-name">from</p>
+     
+      <p id="results">_____</p>
+
+  <!-- JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- ================================================================================== -->
+
+  <!-- Firebase JavaScript Link -->
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
+
+  <script>
+    // Initialize Firebase
+    // This is the code we copied and pasted from our app page
+    var config = {
+    apiKey: "AIzaSyDwcy5YWvdZ6o87CUxf6FrLqnNJR4C1VcI",
+    authDomain: "week-7-9339b.firebaseapp.com",
+    databaseURL: "https://week-7-9339b.firebaseio.com",
+    projectId: "week-7-9339b",
+    storageBucket: "week-7-9339b.appspot.com",
+    messagingSenderId: "426894287273"
+  };
+
+    firebase.initializeApp(config);
+
+
+    // Variables
+    // ================================================================================
+
+    // Get a reference to the database service
+    var database = firebase.database();
+console.log(database);
+    // Initializing our click count at 0
+    // var clickCounter = 0;
+   
+    // Functions
+    // ================================================================================
+var name;
+
+$("#submit-name").on("click", function() {
+    name = $("#userName").val();
+})
+
+
+
+    // On Click
+    $("#submit").on("click", function() {
+
+        var text =$("#input").val()
+      // Add 1 to clickCounter
+    //   clickCounter++;
+      
+      // **** Store Click Data to Firebase in a JSON property called clickCount *****
+      // **** Note how we are using the Firebase .set() method ****
+      // **** .ref() refers to the path you want to save your data to
+      // **** Since we left .ref() blank, it will save to the root directory
+      database.ref().set({
+        user: name,
+        information: text
+      });
+
+     
+    });
+
+// --------------return function 
+
+
+     database.ref().on("value", function(snapshot) {
+
+// Then we console.log the value of snapshot
+console.log(snapshot.val());
+
+// Then we change the html associated with the number.
+$("#results").text(snapshot.val().information);
+console.log("this is information: " + snapshot.val().information);
+$("#results-name").text(snapshot.val().user);
+
+// Then update the clickCounter variable with data from the database.
+var newtext = snapshot.val().information;
+console.log("this is the text: " + newtext);
+
+var newuser = snapshot.val().user;
+console.log("this is the name: " + newuser);
+
+// If there is an error that Firebase runs into -- it will be stored in the "errorObject"
+// Again we could have named errorObject anything we wanted.
+}, function(errorObject) {
+
+// In case of error this will print the error
+console.log("The read failed: " + errorObject.code);
+});
+  </script>
+
+</body>
+
+</html>
+
+
+
+  <!-- firebase.initializeApp(config);
+
+  const dbRefObject = firebase.database().ref().child('object');
+
+  dbRefObject.on('value', snap => console.log(snap.val()));
+ -->
+
+
